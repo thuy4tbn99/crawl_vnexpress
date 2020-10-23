@@ -1,0 +1,29 @@
+response.css('.breadcrumb a').css('::attr(title)').extract()    : get category
+response.css('.title-detail').css('::text').extract()           : get title
+response.css('.description').css('::text').extract()            : get description
+response.css('.Normal').css('::text').extract()                 : get body, kết hợp vs description tạo ra nd hoàn chỉnh
+response.css('.date').css('::text').extract()                   : get date
+
+response.css('.nickname').css('::attr(href)').extract()         : get user, link user
+response.css('.full_content').css('::text').extract()         : get comment có user đi kèm -> phải xử lý
+
+
+response.css('#list_comment::text').extract()
+response.css('.date').css('::text').extract()
+response.css('.tags').css('::attr(href)').extract()
+
+
+$('#pagination > div > a.btn-page.next-page').click() : next comment
+
+$('#box_comment_vne > div > div.view_more_coment.width_common.mb10 > a').click()
+
+document.querySelector("#list_comment")
+local title = splash:evaljs("document.querySelector("#list_comment")")
+
+assert(splash:runjs("$('#pagination > div > a.btn-page.next-page').click();"))  
+
+response.css('div.parttwo-mid li')
+
+
+#############
+response.css('.width_common .title-news a').css('::attr(href)').extract()   : get link bai viet trong thoi su
