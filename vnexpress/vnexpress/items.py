@@ -13,8 +13,9 @@ class VnexpressItem(scrapy.Item):
     date = scrapy.Field()
     title = scrapy.Field()
     body = scrapy.Field()
-    comment = scrapy.Field()
-    user = scrapy.Field()
-    tags = scrapy.Field()
-
+    comment = scrapy.Field()    
+    user = scrapy.Field()   # list id user comment
+    tags = scrapy.Field()   # haven't get
+    link = scrapy.Field()
+    id_user = scrapy.Field()    # used for cmt spider
     pass

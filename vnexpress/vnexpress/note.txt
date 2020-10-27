@@ -1,8 +1,7 @@
 response.css('.breadcrumb a').css('::attr(title)').extract()    : get category
 response.css('.title-detail').css('::text').extract()           : get title
-response.css('.description').css('::text').extract()            : get description
-response.css('.Normal').css('::text').extract()                 : get body, kết hợp vs description tạo ra nd hoàn chỉnh
 response.css('.date').css('::text').extract()                   : get date
+response.css('.top-detail p').css('::text').extract()           : get nd hoanf chinh
 
 response.css('.nickname').css('::attr(href)').extract()         : get user, link user
 response.css('.full_content').css('::text').extract()         : get comment có user đi kèm -> phải xử lý
@@ -12,10 +11,10 @@ response.css('#list_comment::text').extract()
 response.css('.date').css('::text').extract()
 response.css('.tags').css('::attr(href)').extract()
 
+ 
+$('#pagination > div > a.btn-page.next-page').click() : next comment oke check no other result oke
 
-$('#pagination > div > a.btn-page.next-page').click() : next comment
-
-$('#box_comment_vne > div > div.view_more_coment.width_common.mb10 > a').click()
+$('.view_more_coment a').click()	oke get more common
 
 document.querySelector("#list_comment")
 local title = splash:evaljs("document.querySelector("#list_comment")")
@@ -27,3 +26,28 @@ response.css('div.parttwo-mid li')
 
 #############
 response.css('.width_common .title-news a').css('::attr(href)').extract()   : get link bai viet trong thoi su
+
+curl 'http://192.168.204.130:8050/render.html?url=https://vnexpress.net/thoi-su/page-with-javascript.html&timeout=10&wait=0.5'
+
+scrapy shell 'http://192.168.204.130:8050/render.html?url=https://vnexpress.net/thoi-su/&timeout=10&wait=0.5'
+
+response.css('.width_common .title-news a').css('::attr(href)').extract()	oke can loai bo quang cao dung cho all link
+
+
+https://vnexpress.net/thoi-su-p2
+scrapy shell 'http://192.168.204.130:8050/render.html?url=https://vnexpress.net/thoi-su-p2&timeout=10&wait=0.5'
+
+scrapy shell 'http://192.168.204.130:8050/render.html?url=https://vnexpress.net/nhan-su-du-kien-cua-tp-thu-duc-4181505.html&timeout=10&wait=0.5'
+https://vnexpress.net/nhan-su-du-kien-cua-tp-thu-duc-4181505.html
+.item-news-common a
+response.css('.width_common .title-news a').css('::attr(href)').extract() oke vs p2 loai bo quang cao cuoi trang vì nó cho vào phần title-news
+
+
+response.css('#list_comment p:nth-child(1)').css('::text').extract() : get comment name + text
+
+#test for crawl more page comment
+for i=1,5 do
+            print('the way of the future' .. i)
+            assert(splash:runjs("$('#pagination > div > a.btn-page.next-page').click()"))   -- click get next-page comment
+            splash:wait(0.5)
+end
