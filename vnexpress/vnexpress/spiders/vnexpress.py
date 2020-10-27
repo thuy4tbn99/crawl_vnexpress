@@ -33,7 +33,7 @@ class VnexpressSpider(scrapy.Spider):
         next_page = response.urljoin(next_page)
         page_number = int(re.findall('([a-z]+)(\d+)', next_page)[0][1])
         print (next_page)
-        if(next_page is not None and page_number <4):
+        if(next_page is not None and page_number <50):
             # pass
             print( ' with love \n\n')
             yield SplashRequest(url=next_page, callback=self.parse_list_news,
@@ -66,8 +66,6 @@ class VnexpressSpider(scrapy.Spider):
             self.debug = True
         print('thuy\n\n' + original_url + '\t' +str(self.debug))
 
-        
-
         if self.debug:
             self.debug = False
             pass
@@ -82,12 +80,12 @@ class VnexpressSpider(scrapy.Spider):
 
             items['category'] = response.css('.breadcrumb a').css('::attr(title)').extract()
             items['date'] = response.css('.date').css('::text').extract()
-            items['title'] = ''#response.css('.title-detail').css('::text').extract()
+            items['title'] = response.css('.title-detail').css('::text').extract()
             items["link"] = original_url
             print('here for items \n\n')
             items["user"] = response.css('.nickname').css('::attr(href)').extract()
-            items['comment'] = ''#response.css('#list_comment p:nth-child(1)').css('::text').extract()
-            items['body'] = ''#response.css('.top-detail p').css('::text').extract()
+            items['comment'] = response.css('#list_comment p:nth-child(1)').css('::text').extract()
+            items['body'] = response.css('.top-detail p').css('::text').extract()
             yield items
 
             

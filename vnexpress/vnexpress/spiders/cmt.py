@@ -21,7 +21,7 @@ class VnexpressSpider(scrapy.Spider):
     for i=1,5 do
         print(i)
         assert(splash:runjs("$('#load_more_comment').click()"))
-        splash:wait(0.5)
+        splash:wait(3)
     end
     return {
         html = splash:html(),
@@ -37,14 +37,15 @@ class VnexpressSpider(scrapy.Spider):
         yield items
         
         print("continue\n\n")
-        yield SplashRequest(
-            url=response.url,
-            callback=self.parse,
-            # dont_filter = True,
-            meta={
-                "splash": {"endpoint": "execute", "args": {"lua_source": self.script}}
-            },
-        )
+        for i in range(1,5):
+            yield SplashRequest(
+                url=response.url,
+                callback=self.parse,
+                # dont_filter = True,
+                meta={
+                    "splash": {"endpoint": "execute", "args": {"lua_source": self.script}}
+                },
+            )
 
 
 
