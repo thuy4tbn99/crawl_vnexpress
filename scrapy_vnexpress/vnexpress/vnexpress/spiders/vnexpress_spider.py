@@ -7,6 +7,10 @@ class VnexpressSpiderSpider(scrapy.Spider):
     allowed_domains = ['vnexpress.net']
     start_urls = ['http://vnexpress.net/thoi-su']
 
+    custom_settings = {
+        'ITEM_PIPELINES': {'vnexpress.pipelines.VnexpressPipeline': 300,},    # setting used CommentPipeline
+    }
+
     def start_requests(self):
         for url in self.start_urls:
             yield scrapy.Request(url, callback=self.parse_list_news)
@@ -24,7 +28,7 @@ class VnexpressSpiderSpider(scrapy.Spider):
         next_page = response.urljoin(next_page)
         page_number = int((re.findall('\d+', next_page))[0])
         print (next_page)
-        if(next_page is not None and page_number <50):
+        if(next_page is not None and page_number <5):
             # pass
             print( ' with love \n\n')
             yield scrapy.Request(url=next_page, callback=self.parse_list_news)
@@ -35,10 +39,13 @@ class VnexpressSpiderSpider(scrapy.Spider):
         items['category'] = response.css('.breadcrumb a').css('::attr(title)').extract()
         items['date'] = response.css('.date').css('::text').extract()
         items['title'] = response.css('.title-detail').css('::text').extract()
-        items["link"] = response.request.url
-        print('here for items \n\n')
-        items["user"] = response.css('.nickname').css('::attr(href)').extract()
-        items['comment'] =''# response.css('#list_comment p:nth-child(1)').css('::text').extract()
         items['body'] = response.css('.top-detail p').css('::text').extract()
+        print('here for items \n\n')
+        
+        # items["categoryID"] = response.css('meta[name="tt_category_id"]::attr(content)').extract()
+        # items["siteID"] = response.css('meta[name="tt_site_id"]::attr(content)').extract()
+        # items['articleID'] = response.css('meta[name="tt_article_id"]::attr(content)').extract()
+        items["tags"] = response.css('meta[name="its_tag"]::attr(content)').extract()
+        items["link"] = response.request.url
 
         yield items

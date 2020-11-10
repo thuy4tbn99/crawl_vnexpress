@@ -8,14 +8,30 @@ import scrapy
 
 class VnexpressItem(scrapy.Item):
     # define the fields for your item here like:
-    # name = scrapy.Field()
+
     category = scrapy.Field()
     date = scrapy.Field()
     title = scrapy.Field()
     body = scrapy.Field()
-    comment = scrapy.Field()    
-    user = scrapy.Field()   # list id user comment
-    tags = scrapy.Field()   # haven't get
+    
+    categoryID = scrapy.Field()    
+    siteID = scrapy.Field()  
+    articleID = scrapy.Field()   
     link = scrapy.Field()
-    id_user = scrapy.Field()    # used for cmt spider
+    tags = scrapy.Field()   # haven't get
+    pass
+
+class CommentItem(scrapy.Item):
+    userID = scrapy.Field()
+    articleID = scrapy.Field()
+    all_comment = scrapy.Field()
+    total_comment = scrapy.Field()
+    pass
+
+class UserItem(scrapy.Item):
+    userID = scrapy.Field()
+    comment = scrapy.Field()
+    url = scrapy.Field()
+    categoryID = scrapy.Field()
+    articleID = scrapy.Field() 
     pass

@@ -62,9 +62,11 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'vnexpress.pipelines.VnexpressPipeline': 300,
-#}
+ITEM_PIPELINES = {
+   'vnexpress.pipelines.VnexpressPipeline': 300,
+   'vnexpress.pipelines.CommentPipeline': 300,
+   'vnexpress.pipelines.UserPipeline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
