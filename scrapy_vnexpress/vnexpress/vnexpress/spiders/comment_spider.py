@@ -46,7 +46,7 @@ class VnexpressSpiderSpider(scrapy.Spider):
         }
         url = 'https://usi-saas.vnexpress.net/index/get'
 
-        yield scrapy.FormRequest(url= url,callback= self.parse_comment, 
+        yield scrapy.FormRequest(url= url,callback=self.parse_comment, 
             method="GET", 
             formdata = payload,
         )

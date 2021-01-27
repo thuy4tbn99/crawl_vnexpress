@@ -1,0 +1,6 @@
+# data
+data/
+*.csv
+*.rar
+formatComment.py
+tmp.py

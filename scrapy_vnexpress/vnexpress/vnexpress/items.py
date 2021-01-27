@@ -33,5 +33,6 @@ class UserItem(scrapy.Item):
     comment = scrapy.Field()
     url = scrapy.Field()
     categoryID = scrapy.Field()
-    articleID = scrapy.Field() 
+    articleID = scrapy.Field()
+    time = scrapy.Field() 
     pass

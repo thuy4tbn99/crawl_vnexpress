@@ -10,19 +10,19 @@ from scrapy.exporters import CsvItemExporter
 from .items import CommentItem
 import scrapy
 import datetime 
+from .items import UserItem
 
 class VnexpressPipeline:
 
     def __init__(self):
-        self.file = open('article.csv','w+b')
+        self.file = open('articles.csv','w+b')
         self.exporter = CsvItemExporter(self.file, 'unicode')
-        self.exporter.fields_to_export = ['category', 'title', 'body', 'date', 'tags', 'link']
+        self.exporter.fields_to_export = ['category', 'title', 'body', 'date', 'tags', 'link', 'articleID']
         self.exporter.start_exporting
 
     def process_item(self, item, spider):
         self.exporter.export_item(item)
         return item
-
 class CommentPipeline:
 
     def __init__(self):
@@ -31,10 +31,11 @@ class CommentPipeline:
         self.exporter.fields_to_export = ['articleID', 'userID', 'comment', 'userlike', 'time']
         self.exporter.start_exporting
 
-    def format_time(time):
-        result =''
+
+    # def format_time(time):
+    #     result =''
         
-        return result
+    #     return result
 
     def process_item(self, item, spider):
         print('this is comment pipeline \n\n')
@@ -42,19 +43,12 @@ class CommentPipeline:
         # format data to store in comment_article table
         format_item = Format_comment_item()
 
-        # data_dict = {
-        #     'articleID':'',
-        #     'userID': '',
-        #     'comment': '',
-        #     'userlike': '',
-        #     'time': '',
-        # }
-        
         if(item['total_comment'] !=0):
             total_comment = item['total_comment']
             for index in range(total_comment):
                 format_item['articleID'] = item['articleID']
-                format_item['userID'] = int(item['all_comment'][index]['userid'])
+                # format_item['userID'] = int(item['all_comment'][index]['userid'])
+                format_item['userID'] = item['all_comment'][index]['userid']
                 format_item['comment'] = item['all_comment'][index]['content']
                 format_item['userlike'] = item['all_comment'][index]['userlike']
                 format_item['time'] = item['all_comment'][index]['time']
@@ -74,9 +68,22 @@ class UserPipeline:
     def __init__(self):
         self.file = open('user_comment.csv','w+b')
         self.exporter = CsvItemExporter(self.file, 'unicode')
-        self.exporter.fields_to_export = ['userID', 'url', 'comment', 'articleID', 'categoryID']
+        self.exporter.fields_to_export = ['userID', 'time', 'comment', 'url']
+        # self.exporter.fields_to_export = ['userID', 'url', 'comment', 'articleID', 'categoryID']
         self.exporter.start_exporting
     
     def process_item(self, item, spider):
-        self.exporter.export_item(item)
+        
+        print('process from pipeline ', len(item))
+        try:
+            for idx in range(5000):
+                it = UserItem()
+                it['userID'] = item['userID']
+                it['time'] = item['time'][idx]
+                it['comment'] = item['comment'][idx]
+                it['url'] = item['url'][idx]
+                self.exporter.export_item(it)
+        except IndexError:
+            return item
+             
         return item

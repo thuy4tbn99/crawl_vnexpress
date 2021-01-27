@@ -2,10 +2,17 @@ import scrapy
 import re
 
 from ..items import VnexpressItem
+
+# parameter: number pages = total*25
+total_pages_crawl = 4
+
 class VnexpressSpiderSpider(scrapy.Spider):
     name = 'vnexpress'
     allowed_domains = ['vnexpress.net']
-    start_urls = ['http://vnexpress.net/thoi-su']
+    # start_urls = ['http://vnexpress.net/thoi-su']
+
+    # for crawl chinh-tri test NLP-project
+    start_urls = ['http://vnexpress.net/thoi-su/']
 
     custom_settings = {
         'ITEM_PIPELINES': {'vnexpress.pipelines.VnexpressPipeline': 300,},    # setting used CommentPipeline
@@ -28,7 +35,7 @@ class VnexpressSpiderSpider(scrapy.Spider):
         next_page = response.urljoin(next_page)
         page_number = int((re.findall('\d+', next_page))[0])
         print (next_page)
-        if(next_page is not None and page_number <5):
+        if(next_page is not None and page_number <total_pages_crawl):
             # pass
             print( ' with love \n\n')
             yield scrapy.Request(url=next_page, callback=self.parse_list_news)
@@ -44,7 +51,7 @@ class VnexpressSpiderSpider(scrapy.Spider):
         
         # items["categoryID"] = response.css('meta[name="tt_category_id"]::attr(content)').extract()
         # items["siteID"] = response.css('meta[name="tt_site_id"]::attr(content)').extract()
-        # items['articleID'] = response.css('meta[name="tt_article_id"]::attr(content)').extract()
+        items['articleID'] = response.css('meta[name="tt_article_id"]::attr(content)').extract()
         items["tags"] = response.css('meta[name="its_tag"]::attr(content)').extract()
         items["link"] = response.request.url
 
